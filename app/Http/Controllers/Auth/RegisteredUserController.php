@@ -10,15 +10,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
+/**
+ * @group Auth
+ *
+ * Api for managing categories
+ */
 class RegisteredUserController extends Controller
 {
     /**
-     * Handle an incoming registration request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     *
-     * @throws \Illuminate\Validation\ValidationException
+     * Register the user.
      */
     public function store(Request $request)
     {

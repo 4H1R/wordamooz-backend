@@ -8,13 +8,25 @@ use App\Http\Resources\User\AuthUserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @group Auth
+ *
+ * Api for managing categories
+ */
 class AuthenticatedSessionController extends Controller
 {
+    /**
+     * Get current authenticated user.
+     * @authenticated
+     */
     public function index(Request $request)
     {
         return new AuthUserResource($request->user());
     }
 
+    /**
+     * Login the user.
+     */
     public function store(LoginRequest $request)
     {
         $request->authenticate();
@@ -25,10 +37,8 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Destroy an authenticated session.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Logout the user.
+     * @authenticated
      */
     public function destroy(Request $request)
     {

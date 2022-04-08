@@ -6,6 +6,11 @@ use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
+/**
+ * @group Category
+ *
+ * Api for managing categories
+ */
 class CategoryController extends Controller
 {
     public function __construct()
