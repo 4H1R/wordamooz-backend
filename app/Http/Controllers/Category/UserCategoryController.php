@@ -20,8 +20,7 @@ class UserCategoryController extends Controller
 
     /**
      * Display a listing of the user resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @authenticated
      */
     public function index(User $user)
     {
