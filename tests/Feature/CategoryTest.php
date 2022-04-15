@@ -55,6 +55,35 @@ class CategoryTest extends TestCase
         $response->assertForbidden();
     }
 
+    public function test_user_can_get_public_category()
+    {
+        $category = Category::factory()->forUser()->public()->create();
+
+        $response = $this->getJson(route('categories.show', [$category]));
+
+        $response->assertOk();
+    }
+
+    public function test_user_can_get_his_private_category()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+        $category = Category::factory()->for($user)->private()->create();
+
+        $response = $this->getJson(route('categories.show', [$category]));
+
+        $response->assertOk();
+    }
+
+    public function test_user_cannot_get_another_user_private_category()
+    {
+        $category = Category::factory()->forUser()->private()->create();
+
+        $response = $this->getJson(route('categories.show', [$category]));
+
+        $response->assertForbidden();
+    }
+
     public function test_guest_user_can_not_create_category()
     {
         $response = $this->postJson(route('categories.store'), [
