@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Knuckles\Scribe\Scribe;
 
@@ -35,5 +36,6 @@ class AppServiceProvider extends ServiceProvider
                 $request->headers->add(["Authorization" => "Bearer $token"]);
             });
         }
+        Schema::defaultStringLength(191);
     }
 }
