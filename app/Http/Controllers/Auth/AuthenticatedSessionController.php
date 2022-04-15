@@ -26,6 +26,7 @@ class AuthenticatedSessionController extends Controller
 
     /**
      * Login the user.
+     * @unauthenticated
      */
     public function store(LoginRequest $request)
     {

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Category;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the public resource.
      *
      * @return \Illuminate\Http\Response
      */
@@ -27,13 +28,14 @@ class CategoryController extends Controller
     {
         $categories =  Category::query()
             ->where('is_public', true)
-            ->cursorPaginate(30);
+            ->cursorPaginate();
 
         return CategoryResource::collection($categories);
     }
 
     /**
      * Store a newly created resource in storage.
+     * @authenticated
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -55,7 +57,8 @@ class CategoryController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     * @authenticated
+     * 
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
@@ -68,7 +71,8 @@ class CategoryController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
+     * @authenticated
+     * 
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
@@ -88,7 +92,8 @@ class CategoryController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
+     * @authenticated
+     * 
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */

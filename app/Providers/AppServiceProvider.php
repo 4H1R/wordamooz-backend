@@ -4,9 +4,8 @@ namespace App\Providers;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
-use Knuckles\Camel\Extraction\ExtractedEndpointData;
-use Symfony\Component\HttpFoundation\Request;
 use Knuckles\Scribe\Scribe;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,8 +29,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Model::unguard();
         if (class_exists(\Knuckles\Scribe\Scribe::class)) {
-            Scribe::beforeResponseCall(function (Request $request, ExtractedEndpointData $endpointData) {
-                $token = User::first()->api_token;
+            Scribe::beforeResponseCall(function (Request $request) {
+                $user = User::query()->firstOrFail();
+                $token = $user->createToken('scribe token')->plainTextToken;
                 $request->headers->add(["Authorization" => "Bearer $token"]);
             });
         }

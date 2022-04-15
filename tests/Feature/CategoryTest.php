@@ -24,6 +24,37 @@ class CategoryTest extends TestCase
             ->assertOk();
     }
 
+    public function test_guest_user_cannot_get_user_categories()
+    {
+        $user = User::factory()->create();
+        $response = $this->getJson(route('users.categories.index', [$user]));
+
+        $response->assertUnauthorized();
+    }
+
+    public function test_user_can_get_his_categories()
+    {
+        $user = User::factory()->create();
+        Category::factory(3)->for($user)->private()->create();
+        Sanctum::actingAs($user);
+
+        $response = $this->getJson(route('users.categories.index', [$user]));
+
+        $response->assertOk()
+            ->assertJsonCount(3, 'data');
+    }
+
+    public function test_user_cannot_get_another_user_categories()
+    {
+        $user = User::factory()->create();
+        Category::factory(3)->for($user)->private()->create();
+        Sanctum::actingAs($user);
+
+        $response = $this->getJson(route('users.categories.index', [User::factory()->create()]));
+
+        $response->assertForbidden();
+    }
+
     public function test_guest_user_can_not_create_category()
     {
         $response = $this->postJson(route('categories.store'), [

@@ -9,6 +9,10 @@ class Category extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'is_public' => 'boolean',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

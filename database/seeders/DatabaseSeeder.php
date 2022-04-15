@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $users->each(function ($user) {
             $categories =  Category::factory(rand(0, 10))->create(['user_id' => $user->id]);
             $categories->each(function ($category) use ($user) {
-                Post::factory(rand(0, 50))
+                Post::factory(rand(0, 10))
                     ->create(['user_id' => $user->id, 'category_id' => $category->id]);
             });
         });

@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Category\UserCategoryController;
+use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -17,4 +18,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::apiResource('categories', CategoryController::class);
-Route::apiResource('categories.posts', PostController::class);
+Route::apiResource('users.categories', UserCategoryController::class)->only('index');
+// Route::apiResource('categories.posts', PostController::class);

@@ -16,9 +16,9 @@ class CategoryPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user, User $model)
     {
-        return true;
+        return $user->id === $model->id;
     }
 
     /**
