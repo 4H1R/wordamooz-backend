@@ -20,7 +20,7 @@ class PostController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Show category posts.
      */
     public function index(Category $category)
     {
@@ -31,7 +31,7 @@ class PostController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a new post.
      * @authenticated
      */
     public function store(Request $request, Category $category)
@@ -52,7 +52,7 @@ class PostController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show a post.
      */
     public function show(Category $category, Post $post)
     {
@@ -62,7 +62,7 @@ class PostController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update a post.
      * @authenticated
      */
     public function update(Request $request, Post $post)
@@ -71,10 +71,14 @@ class PostController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete a post.
      */
     public function destroy(Post $post)
     {
-        //
+        $this->authorize('delete', $post);
+
+        $post->delete();
+
+        return response()->json(['message' => 'Post deleted successfully'], 200);
     }
 }

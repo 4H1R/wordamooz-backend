@@ -22,4 +22,13 @@ class Category extends Model
     {
         return $this->hasMany(Post::class);
     }
+
+    public function scopeSearch($query)
+    {
+        if (!request()->filled('query')) {
+            return $query;
+        }
+        $key = request('query');
+        return $query->where('name', 'like', "%{$key}%");
+    }
 }

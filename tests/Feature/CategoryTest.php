@@ -24,6 +24,19 @@ class CategoryTest extends TestCase
             ->assertOk();
     }
 
+    public function test_user_can_search_public_categories()
+    {
+        Category::factory(3)->forUser()->public()->create();
+        Category::factory()->forUser()->public()->create([
+            'name' => 'foo'
+        ]);
+
+        $response = $this->getJson(route('categories.index', ['query' => 'foo']));
+
+        $response->assertJsonCount(1, 'data')
+            ->assertOk();
+    }
+
     public function test_guest_user_cannot_get_user_categories()
     {
         $user = User::factory()->create();

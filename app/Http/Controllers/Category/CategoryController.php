@@ -20,21 +20,22 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display a listing of the public resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Show public categories.
+     * @bodyParam query string optional Search query
      */
     public function index()
     {
         $categories =  Category::query()
             ->where('is_public', true)
+            ->search()
+            ->latest('id')
             ->cursorPaginate();
 
         return CategoryResource::collection($categories);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a new category.
      * @authenticated
      */
     public function store(Request $request)
@@ -53,7 +54,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show a category.
      */
     public function show(Category $category)
     {
@@ -63,7 +64,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update a category.
      * @authenticated
      */
     public function update(Request $request, Category $category)
@@ -80,7 +81,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete a category.
      * @authenticated
      */
     public function destroy(Category $category)

@@ -19,14 +19,19 @@ class UserCategoryController extends Controller
     }
 
     /**
-     * Display a listing of the user resource.
+     * Show user categories.
+     * @bodyParam query string optional Search query
      * @authenticated
      */
     public function index(User $user)
     {
         $this->authorize('viewAny', [Category::class, $user]);
 
-        $categories = $user->categories()->cursorPaginate();
+        $categories = $user->categories()
+            ->search()
+            ->latest('id')
+            ->cursorPaginate();
+
         return CategoryResource::collection($categories);
     }
 }
