@@ -73,7 +73,7 @@ class PostController extends Controller
     /**
      * Delete a post.
      */
-    public function destroy(Post $post)
+    public function destroy(Category $category, Post $post)
     {
         $this->authorize('delete', $post);
 

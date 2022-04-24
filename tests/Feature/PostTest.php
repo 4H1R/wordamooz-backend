@@ -115,4 +115,39 @@ class PostTest extends TestCase
 
         $response->assertForbidden();
     }
+
+    public function test_guest_user_cannot_delete_post()
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->for($user)->private()->create();
+        $post = Post::factory()->for($user)->for($category)->create();
+
+        $response = $this->deleteJson(route('categories.posts.destroy', [$category, $post]));
+
+        $response->assertUnauthorized();
+    }
+
+    public function test_user_cannot_delete_another_user_post()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs(User::factory()->create());
+        $category = Category::factory()->for($user)->private()->create();
+        $post = Post::factory()->for($user)->for($category)->create();
+
+        $response = $this->deleteJson(route('categories.posts.destroy', [$category, $post]));
+
+        $response->assertForbidden();
+    }
+
+    public function test_user_can_delete_his_post()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+        $category = Category::factory()->for($user)->private()->create();
+        $post = Post::factory()->for($user)->for($category)->create();
+
+        $response = $this->deleteJson(route('categories.posts.destroy', [$category, $post]));
+
+        $response->assertOk();
+    }
 }
