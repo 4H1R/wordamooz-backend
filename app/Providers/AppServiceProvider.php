@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Knuckles\Scribe\Scribe;
@@ -37,5 +39,8 @@ class AppServiceProvider extends ServiceProvider
             });
         }
         Schema::defaultStringLength(191);
+        DB::listen(function ($sql) {
+            Log::info($sql->sql, $sql->bindings, $sql->time);
+        });
     }
 }

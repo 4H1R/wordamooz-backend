@@ -26,7 +26,7 @@ class PostController extends Controller
     {
         $this->authorize('viewAny', [Post::class, $category]);
 
-        $posts = $category->posts()->cursorPaginate();
+        $posts = $category->posts()->search()->cursorPaginate();
         return PostResource::collection($posts);
     }
 

@@ -29,6 +29,7 @@ class CategoryController extends Controller
             ->where('is_public', true)
             ->search()
             ->latest('id')
+            ->with('media')
             ->cursorPaginate();
 
         return CategoryResource::collection($categories);
@@ -44,9 +45,19 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'is_public' => 'required|boolean',
+            'image' => 'nullable|image|max:512',
         ]);
 
-        $category = Category::create([...$validated, 'user_id' => $request->user()->id]);
+        $category = Category::create([
+            'name' => $validated['name'],
+            'is_public' => $validated['is_public'],
+            'user_id' => $request->user()->id,
+        ]);
+
+        if ($request->hasFile('image')) {
+            $category->addMedia($request->image)
+                ->toMediaCollection();
+        }
 
         return (new CategoryResource($category))
             ->response()
@@ -59,6 +70,8 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         $this->authorize('view', $category);
+
+        $category->with('media');
 
         return new CategoryResource($category);
     }
@@ -74,6 +87,7 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'is_public' => 'required|boolean',
+            'image' => 'nullable|image',
         ]);
 
         $category->update($validated);

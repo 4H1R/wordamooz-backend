@@ -9,6 +9,17 @@ class Post extends Model
 {
     use HasFactory;
 
+    public function scopeSearch($query)
+    {
+        if (!request()->filled('query')) {
+            return $query;
+        }
+        $key = request('query');
+        return $query->where('word', 'like', "%{$key}%")
+            ->orWhere('meaning', 'like', "%{$key}%")
+            ->orWhere('body', 'like', "%{$key}%");
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
