@@ -21,6 +21,7 @@ class PostController extends Controller
 
     /**
      * Show category posts.
+     * @bodyParam query string optional Search query
      */
     public function index(Category $category)
     {
