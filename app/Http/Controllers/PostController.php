@@ -57,7 +57,7 @@ class PostController extends Controller
      */
     public function show(Category $category, Post $post)
     {
-        $this->authorize('view', [$post, $category]);
+        $this->authorize('view', [$category, $post,]);
 
         return new PostResource($post);
     }
@@ -66,9 +66,18 @@ class PostController extends Controller
      * Update a post.
      * @authenticated
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, Category $category, Post $post)
     {
-        //
+        $this->authorize('update', [$post]);
+
+        $validated = $request->validate([
+            'word' => 'required|string|max:255',
+            'meaning' => 'required|string|max:255',
+            'body' => 'required|string',
+        ]);
+
+        $post->update($validated);
+        return new PostResource($post);
     }
 
     /**

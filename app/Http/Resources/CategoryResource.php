@@ -16,7 +16,8 @@ class CategoryResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'image' => $this->whenLoaded('media', function () {
-                return $this->getFirstMediaUrl('default');
+                $image = $this->getFirstMediaUrl('default');
+                return $image === '' ? null : $image;
             }),
         ];
     }

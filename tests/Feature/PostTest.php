@@ -150,4 +150,57 @@ class PostTest extends TestCase
 
         $response->assertOk();
     }
+
+    public function test_guest_user_cannot_update_post()
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->for($user)->create();
+        $post = Post::factory()->for($category)->for($user)->create();
+
+        $response = $this->putJson(route('categories.posts.update', [$post->category, $post]), [
+            'word' => 'test',
+            'meaning' => 'testing',
+            'body' => 'test body',
+        ]);
+
+        $response->assertUnauthorized();
+    }
+
+    public function test_user_can_update_his_post()
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->for($user)->create();
+        $post = Post::factory()->for($category)->for($user)->create();
+        Sanctum::actingAs($user);
+
+        $data = [
+            'word' => 'test',
+            'meaning' => 'testing',
+            'body' => 'test body',
+        ];
+
+        $response = $this->putJson(route('categories.posts.update', [$post->category, $post]), $data);
+
+        $response->assertOk();
+        $this->assertDatabaseHas('posts', [...$data, 'user_id' => $user->id]);
+    }
+
+    public function test_user_can_update_another_user_post()
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->for($user)->create();
+        $post = Post::factory()->for($category)->for($user)->create();
+        Sanctum::actingAs(User::factory()->create());
+
+        $data = [
+            'word' => 'test',
+            'meaning' => 'testing',
+            'body' => 'test body',
+        ];
+
+        $response = $this->putJson(route('categories.posts.update', [$post->category, $post]), $data);
+
+        $response->assertForbidden();
+        $this->assertDatabaseMissing('posts', $data);
+    }
 }

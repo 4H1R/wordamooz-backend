@@ -30,6 +30,7 @@ class UserCategoryController extends Controller
         $categories = $user->categories()
             ->search()
             ->latest('id')
+            ->with('media')
             ->cursorPaginate();
 
         return CategoryResource::collection($categories);

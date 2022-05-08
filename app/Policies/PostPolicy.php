@@ -29,7 +29,7 @@ class PostPolicy
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(?User $user, Post $post, Category $category)
+    public function view(?User $user, Category $category, Post $post)
     {
         return $category->is_public || optional($user)->id === $category->user_id;
     }

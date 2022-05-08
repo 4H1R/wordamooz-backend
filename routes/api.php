@@ -18,5 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::apiResource('categories', CategoryController::class);
-Route::apiResource('users.categories', UserCategoryController::class)->only('index');
-Route::apiResource('categories.posts', PostController::class);
+Route::apiResource('users.categories', UserCategoryController::class)
+    ->scoped()
+    ->only('index');
+Route::apiResource('categories.posts', PostController::class)->scoped();

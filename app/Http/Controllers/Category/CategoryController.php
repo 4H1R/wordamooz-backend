@@ -27,8 +27,8 @@ class CategoryController extends Controller
     {
         $categories =  Category::query()
             ->where('is_public', true)
-            ->search()
             ->latest('id')
+            ->search()
             ->with('media')
             ->cursorPaginate();
 
