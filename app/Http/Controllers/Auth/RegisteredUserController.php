@@ -37,6 +37,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return response()->noContent();
+        $authController = new AuthenticatedSessionController();
+        return $authController->index($request);
     }
 }
